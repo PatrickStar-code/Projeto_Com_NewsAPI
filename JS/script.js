@@ -24,7 +24,6 @@ $(document).ready(function () {
     var url = "https://newsapi.org/v2/top-headlines?country=br&apiKey=b1dcddf3957e4b99835cf2470b05d408"
     $.get(url,
         function (data) {
-            // console.log(data.articles)
             for (let i = 0; i < data.articles.length; i++) {
                 var html = ` <div>
             <img class="relative z-10 object-cover w-full rounded-md h-96"
@@ -91,6 +90,46 @@ $(document).ready(function () {
             }
         );
 
+
+    });
+
+    $("#pesquisar").submit(function (e) { 
+        e.preventDefault();
+        const pesquisa = $("#simple-search").val(); 
+        const categoria_escolhida = $("#categoria").val();
+    
+        const url = "https://newsapi.org/v2/top-headlines?q="+pesquisa+"&country=br&category="+categoria_escolhida+"&apiKey=b1dcddf3957e4b99835cf2470b05d408"
+
+        $.get(url,
+            function (data) {
+                $("#noticias").empty();
+
+                for (let i = 0; i < data.articles.length; i++) {
+                    var html = ` <div>
+                <img class="relative z-10 object-cover w-full rounded-md h-96"
+                    src="${data.articles[i].urlToImage}"
+                    alt="">
+    
+                <div class="relative z-20 max-w-lg p-6 mx-auto -mt-20 bg-white rounded-md shadow ">
+                    <a href="article?i=${i}" class="font-semibold text-gray-800 hover:underline">
+                    ${data.articles[i].title}                
+                    </a>
+    
+                    <p class="mt-3 text-sm text-gray-500  md:text-sm">
+                    ${data.articles[i].description}                
+                    </p>
+    
+                    <p class="mt-3 text-sm text-blue-500">${data.articles[i].publishedAt}  </p>
+                </div>
+            </div>`
+    
+                    $("#noticias").append(html);
+                }
+                $("#texto_categoria").hide();
+
+    
+            }
+        );
 
     });
 
